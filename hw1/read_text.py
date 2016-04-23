@@ -26,11 +26,12 @@ def parse_text(textraw, regex):
     
     return(prs_yr_spch)
     
-text = open('/home/zsuzsa/Documents/text_mining_2016/python_intro/sou_all.txt', 'r').read()
+import re
+text = open('/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/pres_speech/sou_all.txt', 'r').read()
 regex = "_(\d{4}).*?_[a-zA-Z]+.*?_[a-zA-Z]+.*?_([a-zA-Z]+)_\*+(\\n{2}.*?)\\n{3}"
 pres_speech_list = parse_text(text, regex)
 pres_speech_list = pres_speech_list[0:2]
 
-corpus = Corpus(pres_speech_list, '/home/zsuzsa/Documents/text_mining/data/stopwords/stopwords.txt', 2)
+corpus = Corpus(pres_speech_list, '/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/stopwords/stopwords.txt', 2)
 
 

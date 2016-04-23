@@ -160,17 +160,21 @@ class Corpus():
             matrix = self.document_term_matrix(wordset)
         else:
             matrix = self.tf_idf(wordset)
-        matrix = matrix.sum(axis = 1)
-        ordering = matrix.sort(axis=0)
-        maxvalues = ordering[-n]
-        for doc,i in zip(self.docs, len(self.docs)):
-            newcorpus = Corpus()
-            newcorpus = newcorpus.reproduce()
-            if matrix[i] >= maxvalues:
-                
-                
-    def reproduce(self):
-        return self.__class__()
+        matrix_total = matrix.sum(axis = 1)
+        #duplicating an array
+        ordering = np.array(matrix_total)  
+        ordering.sort()
+        doc_list = []
+        for j in range(n):
+            maxvalues = ordering[-(j+1)]
+            #print(ordering)
+            #print(maxvalues)
+            
+            for doc,i in zip(self.docs, range(len(self.docs))):
+                if matrix_total[i] == maxvalues:
+                    doc_list.append(self.docs[i])    
+        return(doc_list)           
+    
                 
             
         
@@ -182,5 +186,5 @@ class Corpus():
 
 ###################################################################################################
 
-[ [4,6,7,1,3,12,5],[4,6,7,1,3,12,5],[4,6,7,1,3,12,5] ] # 3 docs (D) x 7 words (V)
+
         
