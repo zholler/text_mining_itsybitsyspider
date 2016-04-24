@@ -173,7 +173,23 @@ class Corpus():
             for doc,i in zip(self.docs, range(len(self.docs))):
                 if matrix_total[i] == maxvalues:
                     doc_list.append(self.docs[i])    
-        return(doc_list)           
+        return(doc_list)
+        
+    def convert_to_dictionary(path):
+        """
+        convert the afinn text file to dictionary
+        Note: all dictionary entries are lower case 
+        Line_split is tab
+        """
+        dictionary = dict(map(lambda (k,v): (k,int(v)), [ line.split('\t') for line in open(path) ]))
+        return(dictionary)
+    
+    def imported_dictionary_rank(self, dictionary, n):
+        """
+        uses imported dictionary to rank the corpus
+        """           
+        
+        
     
                 
             

@@ -66,6 +66,10 @@ def parse_text(textraw, regex):
 text = open('/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/pres_speech/sou_all.txt', 'r').read()
 regex = "_(\d{4}).*?_[a-zA-Z]+.*?_[a-zA-Z]+.*?_([a-zA-Z]+)_\*+(\\n{2}.*?)\\n{3}"
 pres_speech_list = parse_text(text, regex)
+
+###########################################################################################################################################
+##### Harvard IV dictionaries 
+
 #pres_speech_list = pres_speech_list[0:2]
 
 corpus = HW1.Corpus(pres_speech_list, '/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/stopwords/stopwords.txt', 2)
@@ -84,3 +88,14 @@ econ_idf = corpus.dict_rank(stem_econ,10, False)
 
 mil_idf = corpus.dict_rank(stem_mil,10,False)
 [(i.pres,i.year) for i in mil_idf]
+
+
+####### AFINN dictionary 
+
+ path = "/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/AFINN/AFINN-111.txt"
+
+    
+
+
+
+
