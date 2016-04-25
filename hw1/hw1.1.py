@@ -95,15 +95,26 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
 
 ####### AFINN dictionary 
 
- path = "/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/AFINN/AFINN-111.txt"
+ file = "/home/zsuzsa/Documents/text_mining/data/AFINN/AFINN-111.txt"
 
- def convert_to_dictionary(path):
+ def convert_to_dictionary(file):
         """
         convert the afinn text file to dictionary
         Note: all dictionary entries are lower case 
         Line_split is tab
         """
-        dictionary = dict(map(lambda (k,v): (k,int(v)), [ line.split('\t') for line in open(path) ]))
+        #Open file with proper encoding
+        with codecs.open(file,'r','utf-8') as f: row_list = [ line.split('\t') for line in f ]
+        dict_elements = [ ( PorterStemmer().stem(word[0]) , int(word[1]) ) for word in row_list ]
+        #Take unique elements after stemming, problem: we have words with the same root and diff. score
+        dict_elements = list(set(dict_elements))
+        sorted_dict_elements = sorted(dict_elements, key=lambda tup: tup[0])
+        sorted_dict_unique = []
+        for i in range(len(sorted_dict_elements)):
+            if sorted_dict_elements[i][0] == sorted_dict_elements[i+1][0]:
+                sorted_dict_unique
+        #When we make it a dictionary duplicated elements somehow disappear
+        dictionary = dict(sorted_dict_elements)
         return(dictionary)    
         
 
