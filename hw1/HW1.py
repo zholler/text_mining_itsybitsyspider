@@ -183,7 +183,7 @@ class Corpus():
         non-stem version        
         """           
         dictionary_value = []       
-        for i in range(len(self.docs):
+        for i in range(len(self.docs)):
             text = self.docs[i].text
             dictionary_value[i] = sum(map(lambda word: afinn.get(word, 0), text.lower().split())) 
         

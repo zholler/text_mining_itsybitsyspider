@@ -66,14 +66,16 @@ def parse_text(textraw, regex):
     return(prs_yr_spch)
     
 
-text = open('/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/pres_speech/sou_all.txt', 'r').read()
+# text = open('/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/pres_speech/sou_all.txt', 'r').read()
+text = open('/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/pres_speech/sou_all.txt', 'r').read()
 regex = "_(\d{4}).*?_[a-zA-Z]+.*?_[a-zA-Z]+.*?_([a-zA-Z]+)_\*+(\\n{2}.*?)\\n{3}"
 pres_speech_list = parse_text(text, regex)
 
 ###########################################################################################################################################
 ##### Harvard IV dictionaries 
 
-pres_speech_list = pres_speech_list[0:2]
+# subset pres_speech_list for testing
+# pres_speech_list = pres_speech_list[0:2]
 
 corpus = Corpus(pres_speech_list, '/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/stopwords/stopwords.txt', 2)
 
@@ -95,9 +97,12 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
 
 ####### AFINN dictionary 
 
- file = "/home/zsuzsa/Documents/text_mining/data/AFINN/AFINN-111.txt"
+ # file = "/home/zsuzsa/Documents/text_mining/data/AFINN/AFINN-111.txt"
+ file = "/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/AFINN/AFINN-111.txt"
 
- def convert_to_dictionary(file):
+import pandas as pd
+
+def convert_to_dictionary(file):
         """
         convert the afinn text file to dictionary
         Note: all dictionary entries are lower case 
@@ -108,7 +113,17 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
         dict_elements = [ ( PorterStemmer().stem(word[0]) , int(word[1]) ) for word in row_list ]
         #Take unique elements after stemming, problem: we have words with the same root and diff. score
         dict_elements = list(set(dict_elements))
-        sorted_dict_elements = sorted(dict_elements, key=lambda tup: tup[0])
+        #sorted_dict_elements = sorted(dict_elements, key=lambda tup: tup[0])
+        
+        # turn into pandas dataframe
+        dict_elements_df = pd.DataFrame(dict_elements) #2477 entries
+        
+        # group by stemmed words and average
+        grouped1 = dict_elements_df.groupby(0)
+        dict_elements_agg = grouped1.aggregate(np.mean) #1482 entries
+    
+        # turn pandas df back into list/dictionary - NEED TO DO!!
+        
         sorted_dict_unique = []
         for i in range(len(sorted_dict_elements)):
             if sorted_dict_elements[i][0] == sorted_dict_elements[i+1][0]:
@@ -118,7 +133,7 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
         return(dictionary)    
         
 
+/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/AFINN
 
 
-
-
+    
