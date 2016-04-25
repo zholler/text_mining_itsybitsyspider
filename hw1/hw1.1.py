@@ -38,7 +38,10 @@ stem_mil = [PorterStemmer().stem(i) for i in stripped_text_mil]
 #####################################################################################################################
 
 #source a file
+# again we have problems with that 
 import HW1
+#maybe like that 
+runfile('/home/didi/BGSE/semester3/text_mining_ta/spider/text_mining_itsybitsyspider/hw1/HW1.py', wdir='/home/didi/BGSE/semester3/text_mining_ta/spider/text_mining_itsybitsyspider/hw1')
 
 
 def parse_text(textraw, regex):
@@ -70,9 +73,9 @@ pres_speech_list = parse_text(text, regex)
 ###########################################################################################################################################
 ##### Harvard IV dictionaries 
 
-#pres_speech_list = pres_speech_list[0:2]
+pres_speech_list = pres_speech_list[0:2]
 
-corpus = HW1.Corpus(pres_speech_list, '/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/stopwords/stopwords.txt', 2)
+corpus = Corpus(pres_speech_list, '/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/stopwords/stopwords.txt', 2)
 
 # WITH Frequency count
 
@@ -94,7 +97,16 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
 
  path = "/home/didi/BGSE/semester3/text_mining_ta/text_mining/data/AFINN/AFINN-111.txt"
 
-    
+ def convert_to_dictionary(path):
+        """
+        convert the afinn text file to dictionary
+        Note: all dictionary entries are lower case 
+        Line_split is tab
+        """
+        dictionary = dict(map(lambda (k,v): (k,int(v)), [ line.split('\t') for line in open(path) ]))
+        return(dictionary)    
+        
+
 
 
 

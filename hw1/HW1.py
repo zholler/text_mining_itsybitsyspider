@@ -175,21 +175,19 @@ class Corpus():
                     doc_list.append(self.docs[i])    
         return(doc_list)
         
-    def convert_to_dictionary(path):
-        """
-        convert the afinn text file to dictionary
-        Note: all dictionary entries are lower case 
-        Line_split is tab
-        """
-        dictionary = dict(map(lambda (k,v): (k,int(v)), [ line.split('\t') for line in open(path) ]))
-        return(dictionary)
+   
     
     def imported_dictionary_rank(self, dictionary, n):
         """
         uses imported dictionary to rank the corpus
+        non-stem version        
         """           
+        dictionary_value = []       
+        for i in range(len(self.docs):
+            text = self.docs[i].text
+            dictionary_value[i] = sum(map(lambda word: afinn.get(word, 0), text.lower().split())) 
         
-        
+        return(dictionary_value)
     
                 
             
