@@ -97,8 +97,8 @@ mil_idf = corpus.dict_rank(stem_mil,10,False)
 
 ####### AFINN dictionary 
 
- # file = "/home/zsuzsa/Documents/text_mining/data/AFINN/AFINN-111.txt"
- file = "/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/AFINN/AFINN-111.txt"
+  file = "/home/zsuzsa/Documents/text_mining/data/AFINN/AFINN-111.txt"
+ #file = "/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/AFINN/AFINN-111.txt"
 
 import pandas as pd
 
@@ -111,29 +111,20 @@ def convert_to_dictionary(file):
         #Open file with proper encoding
         with codecs.open(file,'r','utf-8') as f: row_list = [ line.split('\t') for line in f ]
         dict_elements = [ ( PorterStemmer().stem(word[0]) , int(word[1]) ) for word in row_list ]
-        #Take unique elements after stemming, problem: we have words with the same root and diff. score
-        dict_elements = list(set(dict_elements))
-        #sorted_dict_elements = sorted(dict_elements, key=lambda tup: tup[0])
         
-        # turn into pandas dataframe
-        dict_elements_df = pd.DataFrame(dict_elements) #2477 entries
-        
-        # group by stemmed words and average
+        #problem: we have words with the same root and diff. score      
+        # turn into pandas dataframe and group by stemmed words and average
+        dict_elements_df = pd.DataFrame(dict_elements) 
         grouped1 = dict_elements_df.groupby(0)
         dict_elements_agg = grouped1.aggregate(np.mean) #1482 entries
     
-        # turn pandas df back into list/dictionary - NEED TO DO!!
-        
-        sorted_dict_unique = []
-        for i in range(len(sorted_dict_elements)):
-            if sorted_dict_elements[i][0] == sorted_dict_elements[i+1][0]:
-                sorted_dict_unique
-        #When we make it a dictionary duplicated elements somehow disappear
-        dictionary = dict(sorted_dict_elements)
-        return(dictionary)    
-        
+        # turn pandas df back into dictionary 
+        dictionary = dict_elements_agg.to_dict("index")      
+        for key in dictionary.keys():
+            dictionary[key] = dictionary[key].values()[0]
 
-/Users/annekespeijers/Desktop/BGSE/Term3/TextMining/Course_repo/text_mining/data/AFINN
+        return(dictionary)    
+    
 
 
     
