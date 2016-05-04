@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon May  2 14:13:37 2016
-
-@author: zsuzsa
-"""
 
 import numpy as np
 import codecs
@@ -13,6 +8,10 @@ import math
 from nltk.tokenize import wordpunct_tokenize
 from nltk import PorterStemmer
 import pandas as pd
+
+#####################################################################################################
+###Class definitions
+#####################################################################################################
 
 class Document():
     
@@ -73,8 +72,6 @@ class Document():
                  word_dict[word] = word_dict[word] + 1
         return(word_dict)
  
-
-###################################################################################################
 
 class Corpus():
     
@@ -220,6 +217,10 @@ class Corpus():
         sorted_doc_list = sorted(doc_list, key=lambda x: x[2], reverse=True)
         return(sorted_doc_list)
         
+#####################################################################################################
+###Load in presidental speech data
+#####################################################################################################
+
 
 def parse_text(textraw, regex):
     """takes raw string and performs two operations
@@ -242,31 +243,36 @@ def parse_text(textraw, regex):
     
     return(prs_yr_spch)
         
-### Load in text and dictionaries
 #Load speeches and define the corpus
 text = open('../python_intro/sou_all.txt', 'r').read()
 regex = "_(\d{4}).*?_[a-zA-Z]+.*?_[a-zA-Z]+.*?_([a-zA-Z]+)_\*+(\\n{2}.*?)\\n{3}"
 pres_speech_list = parse_text(text, regex)
 corpus = Corpus(pres_speech_list, '../hw1/stopwords.txt', 2)
 
-#X
+
+#####################################################################################################
+###Analysis
+#####################################################################################################
+
+#Generate tf-idf matrix - X
 tf_idf_matrix = corpus.tf_idf(corpus.token_set)
-#SVD
+
+#Compute SVD decomposition
 U, S, V = np.linalg.svd(tf_idf_matrix)
 
+#Plot eigenvalues
 #import matplotlib.pyplot as plt 
-
 #var_expl = S*1000/S.sum()
 #plt.plot( var_expl , marker=".")
 
-#Number of principal component
+#Choose number of principal component
 n = 40
 
 #Compute X_hat
 S_matrix = np.diag(S[0:n])
 pca = np.dot(np.dot(U[:,0:n], S_matrix),V[0:n,:])
 
-#Subset of X and X_hat for a few presidents of interest
+#Subset X and X_hat for a few presidents of interest
 tf_idf_matrix_subset = []
 pca_subset = []
 
@@ -289,34 +295,40 @@ for i in range(len(corpus.docs)):
 tf_idf_matrix_subset = np.array(tf_idf_matrix_subset)
 pca_subset = np.array(pca_subset)
 
-#Compute correlations
+#Compute cosine similartity for X and X_hat
 tf_idf_matrix_corr = np.tril(np.corrcoef(tf_idf_matrix_subset),-1)
 pca_corr = np.tril(np.corrcoef(pca_subset),-1)
 
-#average cosine similartity for tf-idf aka X
+##average cosine similartity for X
+#democrats vs democrats
 tf_idf_dem_corr = tf_idf_matrix_corr[0:n_dem,0:n_dem].flatten()
 junk = tf_idf_dem_corr  > 0
 tf_idf_dem_corr = tf_idf_dem_corr[junk]
-tf_idf_dem_corr.mean()
+print(tf_idf_dem_corr.mean())
 
+#democrats vs republicans
 tf_idf_dem_vs_rep_corr = tf_idf_matrix_corr[(n_dem+1):,0:n_dem].flatten()
-tf_idf_dem_vs_rep_corr.mean()
+print(tf_idf_dem_vs_rep_corr.mean())
 
+#republicans vs republicans
 tf_idf_rep_corr = tf_idf_matrix_corr[(n_dem+1):,(n_dem+1):].flatten()
 junk = tf_idf_rep_corr > 0
 tf_idf_rep_corr  = tf_idf_rep_corr[junk]
-tf_idf_rep_corr.mean()
+print(tf_idf_rep_corr.mean())
 
-#average cosine similartity for pca aka X_hat
+##average cosine similartity for X_hat
+#democrats vs democrats
 pca_dem_corr = pca_corr[0:n_dem,0:n_dem].flatten()
 junk = pca_dem_corr   > 0
 pca_dem_corr  = pca_dem_corr [junk]
-pca_dem_corr.mean()
+print(pca_dem_corr.mean())
 
+#democrats vs republicans
 pca_dem_vs_rep_corr = pca_corr[(n_dem+1):,0:n_dem].flatten()
-pca_dem_vs_rep_corr.mean()
+print(pca_dem_vs_rep_corr.mean())
 
+#republicans vs republicans
 pca_rep_corr = pca_corr[(n_dem+1):,(n_dem+1):].flatten()
 junk = pca_rep_corr > 0
 pca_rep_corr  = pca_rep_corr[junk]
-pca_rep_corr.mean()
+print(pca_rep_corr.mean())
