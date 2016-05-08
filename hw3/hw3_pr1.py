@@ -301,8 +301,11 @@ n = np.zeros((D,k))
 #for updating the Dirichlet distribution B
 m = np.zeros((k,V))
 
+# check if the topics are changing 
+topic_allocation = np.zeros(((S+1),D))
+ 
 for i in range(S):
-
+    print("iteration",i)
     normalizing_const = np.dot(T,B)
     for d in range(D):
         for v in range(V):
@@ -318,7 +321,7 @@ for i in range(S):
         for d in range(D):  
             k_max_boolean[d] = k_max_boolean[d]==j 
             n[d][j] = np.dot(term_matrix[d],k_max_boolean[d])
-
+    
     # see how many times the topic k is allocated to each term 
     for j in range(k):
         k_max_boolean = np.copy(k_max)
@@ -329,11 +332,21 @@ for i in range(S):
     # update the dirichlet constants     
     eta_vec = (eta_vec + m) 
     alpha_vec = (alpha_vec + n)
+        
+    for d in range(D):
+        T[d] = np.random.dirichlet(alpha_vec[d],1)
     
-    
-    
+    for v in range(V):
+        B[:,v] = np.random.dirichlet(eta_vec[:,v],1)
+    # calculate the change in topic allocation of documents 
+    topic_allocation[i+1] = T.argmax(axis=1)
+    non_matching = sum([1 for i,j in zip(topic_allocation[i], topic_allocation[i+1]) if i!=j])    
+    non_matching_percentage = (non_matching / float(D))*100
+    print("non_matching_percentage",non_matching_percentage)
+    i=i+1
             
-            
+## Final topic allocation 
+final_topic = topic_allocation[S+1]
             
     
             
