@@ -172,18 +172,18 @@ def main(main_url):
     if len(property_urls) != no_properties or os.path.isfile("./rejected_full_urls.txt"):
         print("Error in extracting page urls")        
         return(property_urls)
-        break
     scrape(property_urls,"property")
 
 #automate the function    
 
 if __name__=="__main__":
-    main(sys.argv[])
+    main(sys.argv[1])
+    
         
        
     
     
 #### Trial
 
-main_url = "http://ingatlan.com/lista/elado+lakas+bacs-kiskun-megye"
+#main_url = "http://ingatlan.com/lista/elado+lakas+bacs-kiskun-megye"
 
