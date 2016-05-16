@@ -137,7 +137,7 @@ def scrape(urls, file_prefix):
                 #close the portal                
                 rejected_file.close()
         
-        if idx % 2 == 0 and idx != 0: #modular division 
+        if idx % 100 == 0 and idx != 0: #modular division 
             #periodically write the data to file and reinitialise list for memory management
             file_name = file_prefix + str(idx) + '.gz'
             np.savetxt(file_name, project_info, delimiter=',', fmt='%s')

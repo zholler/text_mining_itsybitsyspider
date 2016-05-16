@@ -1,9 +1,0 @@
-property2
-property4
-property6
-property8
-property10
-property12
-property14
-property16
-property17
