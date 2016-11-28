@@ -1,0 +1,31 @@
+﻿##Data collection
+
+Collect information from a popular online real estate listing website using web scraping. The code allows for obtaining all the information available on the website for any specific property or a set of properties specified by a given search condition (e.g.: all the results for a given city or house type). 
+
+##Data cleaning and database structure
+
+As the first step of processing the raw html-s all the relevant, non-textual information is obtained and organized. E.g.: the price, location, number of rooms etc. is extracted from the itemized part of the advertisement. This informations is first cleaned from errors then finally arranged in a standard data table format. 
+
+As the second step the textual description of the property is obtained and organized in a format which is suitable for the later analysis. 
+
+Note, that some real estates are uploaded to the website several times, so additional cleaning is required to identify and remove these duplicates. 
+
+##Preparatory steps of text mining
+
+As the unit of text mining analysis in our case is one word, first the textual description is split into words and other units in the text e.g.: numbers and punctuation. In the second step numbers and punctuations are removed. 
+
+Also, since stopwords (e.g.: conjunctions, determiners) are not interesting in this type of analysis these are also removed using a predefined stopword list. For this a python library called stop-words is used.
+
+In the second step, the remaining words are stemmed using a freely available natural language processing toolkit (http://www.inf.u-szeged.hu/rgai/magyarlanc). Stemming removes all the affixes and suffixes of words to get their roots and determines the part of speech. This step is needed for a meaningful analysis of the word set of the descriptions.
+
+##Text mining using dictionary methods
+
+In the first part of the analysis simple and weighted word counts are computed for all the property descriptions. Simple word counts allow to identify the most frequent words of given property descriptions and to group properties based on the differences in these frequencies. 
+
+A predefined set of words (e.g.: negative/positive attributes, words corresponding to a given type of property) can also be inputed and number of occurrences can be compared across real estate descriptions.
+
+Weighted word counts take into account that some words are naturally more frequent then others and that some words are more frequent in a given context and tries to adjust for these effects. This way relevant differences between the descriptions can be better identified. (e.g.: The words neighborhood or room are not really interesting in this context so we might want to ignore them in the analysis.)
+
+##LDA analysis
+
+Latent variable text mining models aim to identify different topics appearing in the text without explicitly specifying these topics or the corresponding words. More specifically, by using a the LDA approach one can automatically identify the different topics covered in the set of descriptions and determine which description is more on which topic. 
